@@ -61,7 +61,51 @@
 
 // TODO Votre code ici.
 
+$user = 'root';
+$password = '';
+$server = 'localhost';
+$db = 'table_test_php';
+
+$conn = new PDO ("mysql:host=$server; dbname=$db; charset=utf8", $user, $password);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 try {
-    ...
+
+    $sql = "
+        CREATE TABLE utilisateur (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            nom VARCHAR(50) NOT NULL,
+            prenom VARCHAR(50) NOT NULL,
+            email VARCHAR(100) NOT NULL,
+            password VARCHAR(100) NOT NULL,
+            adresse VARCHAR(255) NOT NULL,
+            code_postal SMALLINT UNSIGNED NOT NULL, 
+            pays VARCHAR(56) NOT NULL,
+            date_join DATETIME DEFAULT CURRENT_TIMESTAMP ,
+            UNIQUE(email)
+        )
+    ";
+    $conn->exec($sql);
+    echo "table utilisateur crée <br>";
 }
-catch...
+catch(PDOException $e) {
+    echo "Erreur de connexion pour l'utilisateur <br>" . $e->getMessage();
+}
+
+try {
+
+    $request = "
+        CREATE TABLE produit (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            titre VARCHAR(100) NOT NULL,
+            prix DECIMAL NOT NULL,
+            description_courte VARCHAR(255) NOT NULL,
+            description_longue TEXT NOT NULL
+        )
+    ";
+    $conn->exec($request);
+    echo "table produit crée";
+}
+catch(PDOException $e) {
+    echo "Erreur de connexion pour produit <br>" . $e->getMessage();
+}
